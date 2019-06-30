@@ -105,8 +105,9 @@ data = (train_bow_features, train_labels, val_bow_features, val_labels)
 # test_bow_features and test_labels.
 #-------------------------------------------------------------------------------
 
-(fr, sr) = p1.classifier_accuracy(p1.pegasos, train_bow_features, test_bow_features, train_labels, test_labels, T=25, L=0.01)
-print(sr)
+# (fr, sr) = p1.classifier_accuracy(p1.pegasos, train_bow_features, test_bow_features, train_labels, test_labels, T=25, L=0.01)
+# print(sr)
+
 #-------------------------------------------------------------------------------
 # Assign to best_theta, the weights (and not the bias!) learned by your most
 # accurate algorithm with the optimal choice of hyperparameters.
