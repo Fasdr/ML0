@@ -68,7 +68,7 @@ test_bow_features = p1.extract_bow_feature_vectors(test_texts, dictionary)
 # Problem 8
 #-------------------------------------------------------------------------------
 
-# data = (train_bow_features, train_labels, val_bow_features, val_labels)
+data = (train_bow_features, train_labels, val_bow_features, val_labels)
 #
 # # values of T and lambda to try
 # Ts = [1, 5, 10, 15, 25, 50]
@@ -105,8 +105,8 @@ test_bow_features = p1.extract_bow_feature_vectors(test_texts, dictionary)
 # test_bow_features and test_labels.
 #-------------------------------------------------------------------------------
 
-# Your code here
-
+(fr, sr) = p1.classifier_accuracy(p1.pegasos, train_bow_features, test_bow_features, train_labels, test_labels, T=25, L=0.01)
+print(sr)
 #-------------------------------------------------------------------------------
 # Assign to best_theta, the weights (and not the bias!) learned by your most
 # accurate algorithm with the optimal choice of hyperparameters.
