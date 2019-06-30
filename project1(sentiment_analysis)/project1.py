@@ -353,12 +353,14 @@ def bag_of_words(texts):
 
     Feel free to change this code as guided by Problem 9
     """
-    # Your code here
-    dictionary = {} # maps word to unique index
+    with open('stopwords.txt') as f:
+        stopwords = set(f.read().split())
+        f.close()
+    dictionary = {}  # maps word to unique index
     for text in texts:
         word_list = extract_words(text)
         for word in word_list:
-            if word not in dictionary:
+            if word not in dictionary and word not in stopwords:
                 dictionary[word] = len(dictionary)
     return dictionary
 #pragma: coderesponse end
