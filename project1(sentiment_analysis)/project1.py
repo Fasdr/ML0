@@ -36,8 +36,8 @@ def hinge_loss_single(feature_vector, label, theta, theta_0):
     Returns: A real number representing the hinge loss associated with the
     given data point and parameters.
     """
-    # Your code here
-    raise NotImplementedError
+    d = np.matmul(feature_vector.transpose(), theta) + theta_0
+    return max(0, 1 - label * d)
 #pragma: coderesponse end
 
 
