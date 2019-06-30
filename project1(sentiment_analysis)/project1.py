@@ -278,8 +278,15 @@ def classify(feature_matrix, theta, theta_0):
     given theta and theta_0. If a prediction is GREATER THAN zero, it should
     be considered a positive classification.
     """
-    # Your code here
-    raise NotImplementedError
+    l = len(feature_matrix)
+    out = np.zeros(l)
+    for i in range(l):
+        d = np.matmul(feature_matrix[i].transpose(), theta) + theta_0
+        if d > 0:
+            out[i] = 1
+        else:
+            out[i] = -1
+    return out
 #pragma: coderesponse end
 
 
@@ -316,8 +323,10 @@ def classifier_accuracy(
     trained classifier on the training data and the second element is the
     accuracy of the trained classifier on the validation data.
     """
-    # Your code here
-    raise NotImplementedError
+    (theta, theta_0) = classifier(train_feature_matrix, train_labels, **kwargs)
+    fr = accuracy(classify(train_feature_matrix, theta, theta_0), train_labels)
+    sr = accuracy(classify(val_feature_matrix, theta, theta_0), val_labels)
+    return (fr, sr)
 #pragma: coderesponse end
 
 
