@@ -60,8 +60,11 @@ def hinge_loss_full(feature_matrix, labels, theta, theta_0):
     given dataset and parameters. This number should be the average hinge
     loss across all of the points in the feature matrix.
     """
-    # Your code here
-    raise NotImplementedError
+    k = 0
+    l = len(feature_matrix)
+    for i in range(l):
+        k += hinge_loss_single(feature_matrix[i], labels[i], theta, theta_0)
+    return k / l
 #pragma: coderesponse end
 
 
@@ -88,8 +91,12 @@ def perceptron_single_step_update(
     real valued number with the value of theta_0 after the current updated has
     completed.
     """
-    # Your code here
-    raise NotImplementedError
+    eps = 0.001
+    d = label*(np.matmul(feature_vector.transpose(), current_theta) + current_theta_0)
+    if d < eps:
+        current_theta = current_theta + label * feature_vector
+        current_theta_0 = current_theta_0 + label
+    return (current_theta, current_theta_0)
 #pragma: coderesponse end
 
 
@@ -119,12 +126,12 @@ def perceptron(feature_matrix, labels, T):
     theta_0, the offset classification parameter, after T iterations through
     the feature matrix.
     """
-    # Your code here
+    theta = np.zeros(len(feature_matrix.transpose()))
+    theta_0 = 0
     for t in range(T):
         for i in get_order(feature_matrix.shape[0]):
-            # Your code here
-            pass
-    raise NotImplementedError
+            (theta, theta_0) = perceptron_single_step_update(feature_matrix[i], labels[i], theta, theta_0)
+    return (theta, theta_0)
 #pragma: coderesponse end
 
 
@@ -158,8 +165,18 @@ def average_perceptron(feature_matrix, labels, T):
     Hint: It is difficult to keep a running average; however, it is simple to
     find a sum and divide.
     """
-    # Your code here
-    raise NotImplementedError
+    k = len(feature_matrix.transpose())
+    n = len(feature_matrix)
+    theta = np.zeros(k)
+    stheta = np.zeros(k)
+    theta_0 = 0
+    stheta_0 = 0
+    for t in range(T):
+        for i in get_order(feature_matrix.shape[0]):
+            (theta, theta_0) = perceptron_single_step_update(feature_matrix[i], labels[i], theta, theta_0)
+            (stheta, stheta_0) = (stheta + theta, stheta_0 + theta_0)
+    (stheta, stheta_0) = (stheta/(n*T), stheta_0/(n*T))
+    return (stheta, stheta_0)
 #pragma: coderesponse end
 
 
@@ -190,8 +207,13 @@ def pegasos_single_step_update(
     real valued number with the value of theta_0 after the current updated has
     completed.
     """
-    # Your code here
-    raise NotImplementedError
+    d = label*(np.matmul(feature_vector.transpose(), current_theta) + current_theta_0)
+    if d <= 1:
+        current_theta = (1 - eta * L) * current_theta + eta * label * feature_vector
+        current_theta_0 = current_theta_0 + label * eta
+    else:
+        current_theta = (1 - eta * L) * current_theta
+    return (current_theta, current_theta_0)
 #pragma: coderesponse end
 
 
@@ -225,8 +247,14 @@ def pegasos(feature_matrix, labels, T, L):
     number with the value of the theta_0, the offset classification
     parameter, found after T iterations through the feature matrix.
     """
-    # Your code here
-    raise NotImplementedError
+    theta = np.zeros(len(feature_matrix.transpose()))
+    theta_0 = 0
+    ft = 1
+    for t in range(T):
+        for i in get_order(feature_matrix.shape[0]):
+            (theta, theta_0) = pegasos_single_step_update(feature_matrix[i], labels[i], L, 1/np.sqrt(ft), theta, theta_0)
+            ft += 1
+    return (theta, theta_0)
 #pragma: coderesponse end
 
 # Part II
