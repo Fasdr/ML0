@@ -1,4 +1,7 @@
 import numpy as np
+import scipy
+
+from scipy import sparse
 
 ### Functions for you to fill in ###
 
@@ -21,8 +24,9 @@ def closed_form(X, Y, lambda_factor):
     d = len(XTX)
     fR = XTX + lambda_factor*np.identity(d)
     R = np.linalg.inv(fR)
-    nY = np.matmul(XT, Y)
-    return np.matmul(R, nY)
+    nR = np.matmul(R, XT)
+    return np.matmul(nR, Y)
+
 
 #pragma: coderesponse end
 
