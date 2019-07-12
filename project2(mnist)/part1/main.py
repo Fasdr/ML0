@@ -87,7 +87,6 @@ plot_images(train_x[0:20, :])
 # #######################################################################
 #
 # # TODO: first fill out functions in softmax.py, or run_softmax_on_MNIST will not work
-
 def run_softmax_on_MNIST(temp_parameter=1):
     """
     Trains softmax, classifies test data, computes test error, and plots cost function
@@ -104,7 +103,7 @@ def run_softmax_on_MNIST(temp_parameter=1):
         Final test error
     """
     train_x, train_y, test_x, test_y = get_MNIST_data()
-    theta, cost_function_history = softmax_regression(train_x, train_y, temp_parameter, alpha= 0.3, lambda_factor = 1.0e-4, k = 10, num_iterations = 150)
+    theta, cost_function_history = softmax_regression(train_x, train_y, temp_parameter, alpha=0.3, lambda_factor=1.0e-4, k=10, num_iterations=150)
     plot_cost_function_over_time(cost_function_history)
     test_error = compute_test_error(test_x, test_y, theta, temp_parameter)
     # Save the model parameters theta obtained from calling softmax_regression to disk.

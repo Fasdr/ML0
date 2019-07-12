@@ -61,16 +61,10 @@ def compute_cost_function(X, Y, theta, lambda_factor, temp_parameter):
     n = len(Y)
     k = len(theta)
     H = np.clip(compute_probabilities(X, theta, temp_parameter), 1e-15, 1-1e-15)
-    s1 = 0
-    s2 = 0
-    for i in range(n):
-        for j in range(k):
-            s1 = s1 + (Y[i] == j) * np.log(H[j][i])
-    s1 = -1/n * s1
-    for t1 in theta:
-        for t2 in t1:
-            s2 = s2 + t2*t2
-    s2 = lambda_factor/2 * s2
+    H = np.log(H)
+    M = sparse.coo_matrix(([1] * n, (Y, range(n))), shape=(k, n)).toarray()
+    s1 = -1/n * np.sum(M*H)
+    s2 = lambda_factor/2 * np.sum(theta*theta)
     return s1 + s2
 
 
@@ -190,7 +184,7 @@ def get_classification(X, theta, temp_parameter):
     """
     X = augment_feature_vector(X)
     probabilities = compute_probabilities(X, theta, temp_parameter)
-    return np.argmax(probabilities, axis = 0)
+    return np.argmax(probabilities, axis=0)
 
 def plot_cost_function_over_time(cost_function_history):
     plt.plot(range(len(cost_function_history)), cost_function_history)
