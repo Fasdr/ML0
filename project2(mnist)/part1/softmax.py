@@ -32,8 +32,13 @@ def compute_probabilities(X, theta, temp_parameter):
     Returns:
         H - (k, n) NumPy array, where each entry H[j][i] is the probability that X[i] is labeled as j
     """
-    #YOUR CODE HERE
-    raise NotImplementedError
+    k = len(theta)
+    n = len(X)
+    pH = np.matmul(theta, X.transpose())/temp_parameter
+    nH = pH.transpose()
+    H = np.array([np.exp(tx - max(tx))/(k*np.mean(np.exp(tx - max(tx)))) for tx in nH])
+    return H.transpose()
+
 #pragma: coderesponse end
 
 #pragma: coderesponse template
@@ -53,8 +58,22 @@ def compute_cost_function(X, Y, theta, lambda_factor, temp_parameter):
     Returns
         c - the cost value (scalar)
     """
-    #YOUR CODE HERE
-    raise NotImplementedError
+    n = len(Y)
+    k = len(theta)
+    H = np.clip(compute_probabilities(X, theta, temp_parameter), 1e-15, 1-1e-15)
+    s1 = 0
+    s2 = 0
+    for i in range(n):
+        for j in range(k):
+            s1 = s1 + (Y[i] == j) * np.log(H[j][i])
+    s1 = -1/n * s1
+    for t1 in theta:
+        for t2 in t1:
+            s2 = s2 + t2*t2
+    s2 = lambda_factor/2 * s2
+    return s1 + s2
+
+
 #pragma: coderesponse end
 
 #pragma: coderesponse template
@@ -75,8 +94,13 @@ def run_gradient_descent_iteration(X, Y, theta, alpha, lambda_factor, temp_param
     Returns:
         theta - (k, d) NumPy array that is the final value of parameters theta
     """
-    #YOUR CODE HERE
-    raise NotImplementedError
+    n = len(Y)
+    k = len(theta)
+    H = compute_probabilities(X, theta, temp_parameter)
+    M = sparse.coo_matrix(([1] * n, (Y, range(n))), shape=(k, n)).toarray()
+    g = -1/(temp_parameter*n)*(M - H) @ X + lambda_factor * theta
+    return theta - alpha * g
+
 #pragma: coderesponse end
 
 #pragma: coderesponse template
