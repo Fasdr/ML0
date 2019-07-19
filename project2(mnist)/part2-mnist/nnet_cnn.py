@@ -42,13 +42,11 @@ def main():
 
     #################################
     ## Model specification TODO
-#pragma: coderesponse template name="pytorchcnn" dedent="true"
     model = nn.Sequential(
               nn.Conv2d(1, 32, (3, 3)),
               nn.ReLU(),
               nn.MaxPool2d((2, 2)),
             )
-#pragma: coderesponse end
     ##################################
 
     train_model(train_batches, dev_batches, model, nesterov=True)

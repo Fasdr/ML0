@@ -13,7 +13,6 @@ nb_epoch = 30
 num_classes = 10
 img_rows, img_cols = 42, 28 # input image dimensions
 
-#pragma: coderesponse template name="mlp"
 class MLP(nn.Module):
 
     def __init__(self, input_dimension):
@@ -27,7 +26,6 @@ class MLP(nn.Module):
         # TODO use model layers to predict the two digits
 
         return out_first_digit, out_second_digit
-#pragma: coderesponse end
 
 def main():
     X_train, y_train, X_test, y_test = U.get_data(path_to_data_dir, use_mini_dataset)

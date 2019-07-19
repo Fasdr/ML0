@@ -13,17 +13,13 @@ import math
 """
 
 
-#pragma: coderesponse template
 def rectified_linear_unit(x):
     """ Returns the ReLU of x, or the maximum between 0 and x."""
     # TODO
-#pragma: coderesponse end
 
-#pragma: coderesponse template
 def rectified_linear_unit_derivative(x):
     """ Returns the derivative of ReLU."""
     # TODO
-#pragma: coderesponse end
 
 def output_layer_activation(x):
     """ Linear function, returns input as is. """
@@ -53,7 +49,6 @@ class NeuralNetwork():
         self.training_points = [((2,1), 10), ((3,3), 21), ((4,5), 32), ((6, 6), 42)]
         self.testing_points = [(1,1), (2,2), (3,3), (5,5), (10,10)]
 
-#pragma: coderesponse template prefix="class NeuralNetwork(NeuralNetworkBase):\n\n"
     def train(self, x1, x2, y):
 
         ### Forward propagation ###
@@ -80,9 +75,7 @@ class NeuralNetwork():
         self.biases = # TODO
         self.input_to_hidden_weights = # TODO
         self.hidden_to_output_weights = # TODO
-#pragma: coderesponse end
 
-#pragma: coderesponse template prefix="class NeuralNetwork(NeuralNetworkBase):\n\n"
     def predict(self, x1, x2):
 
         input_values = np.matrix([[x1],[x2]])
@@ -94,7 +87,6 @@ class NeuralNetwork():
         activated_output = # TODO
 
         return activated_output.item()
-#pragma: coderesponse end
 
     # Run this to train your neural network once you complete the train method
     def train_neural_network(self):
