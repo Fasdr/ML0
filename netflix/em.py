@@ -77,9 +77,31 @@ def mstep(X: np.ndarray, post: np.ndarray, mixture: GaussianMixture,
     Returns:
         GaussianMixture: the new gaussian mixture
     """
+    old_mu = mixture.mu
+
     _, k = post.shape
     n, d = X.shape
 
+    p = post.sum(axis=0) / n
+    new_X = np.tile(X[:, :, None], (1, 1, k))
+    mask = np.where(new_X != 0, 1, 0)
+    new_post = np.swapaxes(np.tile(post[:, :, None], (1, 1, d)), 1, 2)
+
+    mu = np.swapaxes(((new_post * new_X).sum(axis=0) / (new_post * mask).sum(axis=0)), 0, 1)
+
+    checker = np.swapaxes((mask*new_post).sum(axis=0), 0, 1)
+
+    mu = np.where(checker >= 1, mu, old_mu)
+
+    new_mu = np.swapaxes(np.tile(mu[:, :, None], (1, 1, n)), 0, 2)
+
+    norms = ((new_X - mask * new_mu) ** 2).sum(axis=1)
+    w_norms = (norms * post).sum(axis=0)
+    new_mask = mask.sum(axis=1)
+
+    var = (((new_mask * post).sum(axis=0)) ** (-1)) * w_norms
+    var = np.where(var > min_variance, var, min_variance)
+    return GaussianMixture(mu, var, p)
 
 def run(X: np.ndarray, mixture: GaussianMixture,
         post: np.ndarray) -> Tuple[GaussianMixture, np.ndarray, float]:
@@ -96,8 +118,14 @@ def run(X: np.ndarray, mixture: GaussianMixture,
             for all components for all examples
         float: log-likelihood of the current assignment
     """
-    raise NotImplementedError
+    old_log = float('-inf')
+    post, new_log = estep(X, mixture)
+    while new_log - old_log > 10**(-6)*abs(new_log):
+        mixture = mstep(X, post)
+        old_log = new_log
+        post, new_log = estep(X, mixture)
 
+    return mixture, post, new_log
 
 def fill_matrix(X: np.ndarray, mixture: GaussianMixture) -> np.ndarray:
     """Fills an incomplete matrix according to a mixture model
