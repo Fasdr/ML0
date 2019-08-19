@@ -51,8 +51,7 @@ def estep(X: np.ndarray, mixture: GaussianMixture) -> Tuple[np.ndarray, float]:
     new_p = p[:, None]
     new_p = np.tile(new_p, (1, n))
     new_p = np.swapaxes(new_p, 0, 1)
-    new_log_p = np.log(1e-16 + new_p)
-    f = new_log_p + np.log(N)
+    f = np.log((1e-16 + new_p) * N)
     loss = (np.exp(f).sum(axis=1))
     out_loss = np.log(loss).sum()
     new_f = np.log(np.tile(loss[:, None], (1, k)))
