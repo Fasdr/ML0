@@ -48,13 +48,18 @@ def estep(X: np.ndarray, mixture: GaussianMixture) -> Tuple[np.ndarray, float]:
     norms = (args ** 2).sum(axis=2)
     N = ((2 * np.pi * new_var) ** (-dim_X / 2)) * np.exp(-((2 * new_var) ** (-1)) * norms)
 
+    log_N = (-dim_X / 2) * np.log(2 * np.pi * new_var) - norms * ((2 * new_var) ** (-1))
+
     new_p = p[:, None]
     new_p = np.tile(new_p, (1, n))
     new_p = np.swapaxes(new_p, 0, 1)
-    f = np.log((1e-16 + new_p) * N)
-    loss = (np.exp(f).sum(axis=1))
-    out_loss = np.log(loss).sum()
-    new_f = np.log(np.tile(loss[:, None], (1, k)))
+    f = np.log(1e-16 + new_p) + log_N
+    loss = logsumexp(f, axis=1)
+    # loss = (np.exp(f).sum(axis=1))
+    out_loss = loss.sum()
+    # out_loss = np.log(loss).sum()
+    new_f = np.tile(loss[:, None], (1, k))
+    # new_f = np.log(np.tile(loss[:, None], (1, k)))
     final_f = f - new_f
     out_p = np.exp(final_f)
 
@@ -120,7 +125,7 @@ def run(X: np.ndarray, mixture: GaussianMixture,
     old_log = float('-inf')
     post, new_log = estep(X, mixture)
     while new_log - old_log > 10**(-6)*abs(new_log):
-        mixture = mstep(X, post)
+        mixture = mstep(X, post, mixture)
         old_log = new_log
         post, new_log = estep(X, mixture)
 

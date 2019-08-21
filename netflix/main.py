@@ -23,12 +23,16 @@ import em
 
 X = np.loadtxt("netflix_incomplete.txt")
 
-for k in [1, 12]:
-    for i in range(5):
-        gaussian, post = common.init(X, k, seed=i)
-        gaussian, post, new_ll = em.run(X, gaussian, post)
-        print("EM: number of classes {}, random seed {}:".format(k, i))
-        print(new_ll)
+# for k in [1, 12]:
+#     for i in range(5):
+#         gaussian, post = common.init(X, k, seed=i)
+#         gaussian, post, new_ll = em.run(X, gaussian, post)
+#         print("EM: number of classes {}, random seed {}:".format(k, i))
+#         print(new_ll)
+
+# gaussian, post = common.init(X, 12, seed=1)
+# gaussian, post, new_ll = em.run(X, gaussian, post)
+# print(new_ll)
 
 
 # for k in range(1, 5, 1):
