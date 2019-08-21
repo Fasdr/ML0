@@ -141,4 +141,49 @@ def fill_matrix(X: np.ndarray, mixture: GaussianMixture) -> np.ndarray:
     Returns
         np.ndarray: a (n, d) array with completed data
     """
-    raise NotImplementedError
+
+    mu = mixture.mu
+    var = mixture.var
+    p = mixture.p
+
+    k, = var.shape
+    n, d = X.shape
+
+    mask = np.where(X != 0, 1, 0)
+    dim_X = mask.sum(axis=1)
+    dim_X = dim_X[:, None]
+    dim_X = np.tile(dim_X, (1, k))
+
+    new_X = X[:, :, None]
+    new_X = np.tile(new_X, (1, 1, k))
+    new_X = np.swapaxes(new_X, 1, 2)
+
+    new_var = var[:, None]
+    new_var = np.tile(new_var, (1, n))
+    new_var = np.swapaxes(new_var, 0, 1)
+
+    new_mu = mu[:, :, None]
+    new_mu = np.tile(new_mu, (1, 1, n))
+    new_mu = np.swapaxes(new_mu, 0, 2)
+    new_mu = np.swapaxes(new_mu, 1, 2)
+
+    args = np.where(new_X == 0, 0, new_X - new_mu)
+    norms = (args ** 2).sum(axis=2)
+    log_N = (-dim_X / 2) * np.log(2 * np.pi * new_var) - norms * ((2 * new_var) ** (-1))
+    new_p = p[:, None]
+    new_p = np.tile(new_p, (1, n))
+    new_p = np.swapaxes(new_p, 0, 1)
+    f = np.log(1e-16 + new_p) + log_N
+    loss = logsumexp(f, axis=1)
+    new_f = np.tile(loss[:, None], (1, k))
+    final_f = f - new_f
+    out_p = np.exp(final_f)
+
+    new_post = np.swapaxes(np.tile(out_p[:, :, None], (1, 1, d)), 1, 2)
+    out_mu = np.swapaxes(np.tile(mu[:, :, None], (1, 1, n)), 0, 2)
+
+    out_matrix = (new_post * out_mu).sum(axis=2)
+
+    out_X = X + (1 - mask) * out_matrix
+
+    return out_X

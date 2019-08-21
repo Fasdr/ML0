@@ -22,7 +22,7 @@ import em
 #         common.plot(X, gaussian, post, "EM: number of classes{}, random seed {}".format(k, i))
 
 X = np.loadtxt("netflix_incomplete.txt")
-
+X_gold = np.loadtxt('netflix_complete.txt')
 # for k in [1, 12]:
 #     for i in range(5):
 #         gaussian, post = common.init(X, k, seed=i)
@@ -30,10 +30,10 @@ X = np.loadtxt("netflix_incomplete.txt")
 #         print("EM: number of classes {}, random seed {}:".format(k, i))
 #         print(new_ll)
 
-# gaussian, post = common.init(X, 12, seed=1)
-# gaussian, post, new_ll = em.run(X, gaussian, post)
-# print(new_ll)
-
+gaussian, post = common.init(X, 12, seed=1)
+gaussian, post, new_ll = em.run(X, gaussian, post)
+X_pred = em.fill_matrix(X, gaussian)
+print(common.rmse(X_gold, X_pred))
 
 # for k in range(1, 5, 1):
 #     for i in range(5):
