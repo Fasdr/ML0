@@ -10,7 +10,7 @@ STEP_COUNT = 0  #count the number of steps in current episode
 MAX_STEPS = 20
 
 # --Simple quests
-quests = ['You are bored.', 'You are getting fat.', 'You are hungry.','You are sleepy.']
+quests = ['You are bored.', 'You are getting fat.', 'You are hungry.', 'You are sleepy.']
 quests_map = {}
 # --(somewhat) complex quests
 # -- quests = {'You are not sleepy but hungry.',
@@ -21,7 +21,7 @@ quests_map = {}
 quest_actions = ['watch', 'exercise', 'eat', 'sleep'] #aligned to quests above
 quest_objects = ['tv', 'bike', 'apple', 'bed'] #aligned to quest actions above
 
-rooms = ['Living', 'Garden', 'Kitchen','Bedroom']
+rooms = ['Living', 'Garden', 'Kitchen', 'Bedroom']
 living_desc = ['This room has a couch, chairs and TV.',
           'You have entered the living room. You can watch TV here.',
           'This room has two sofas, chairs and a chandelier.',
@@ -54,8 +54,8 @@ garden_transit = ['Kitchen', 'Living', 'Garden']
 kitchen_valid_act = ['go', 'go', 'eat']
 kitchen_valid_obj = ['north', 'east', 'apple']
 kitchen_transit = ['Garden', 'Bedroom', 'Kitchen']
-bedroom_valid_act =['go', 'go', 'sleep']
-bedroom_valid_obj =['north', 'west', 'bed']
+bedroom_valid_act = ['go', 'go', 'sleep']
+bedroom_valid_obj = ['north', 'west', 'bed']
 bedroom_transit = ['Living', 'Kitchen', 'Bedroom']
 
 rooms_valid_acts = {'Living': living_valid_act, 'Garden': garden_valid_act, 'Kitchen': kitchen_valid_act, 'Bedroom': bedroom_valid_act}
@@ -68,8 +68,8 @@ NUM_ACTIONS = len(actions)
 NUM_OBJECTS = len(objects)
 
 
-command_is_valid = np.zeros((NUM_ROOMS,NUM_ACTIONS,NUM_OBJECTS))
-transit_matrix = np.zeros((NUM_ROOMS,NUM_ACTIONS,NUM_OBJECTS,NUM_ROOMS))
+command_is_valid = np.zeros((NUM_ROOMS, NUM_ACTIONS, NUM_OBJECTS))
+transit_matrix = np.zeros((NUM_ROOMS, NUM_ACTIONS, NUM_OBJECTS, NUM_ROOMS))
 
 #build a map rooms_desc_map that maps a room description to the corresponding room index.
 # A map quests_map that maps quest text to the quest index

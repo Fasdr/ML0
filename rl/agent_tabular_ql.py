@@ -34,8 +34,11 @@ def epsilon_greedy(state_1, state_2, q_func, epsilon):
     Returns:
         (int, int): the indices describing the action/object to take
     """
-    # TODO Your code here
-    action_index, object_index = None, None
+    if np.random.rand(1).item() <= epsilon:
+        action_index, object_index = np.random.randint(NUM_ACTIONS), np.random.randint(NUM_OBJECTS)
+    else:
+        space = q_func[state_1, state_2]
+        action_index, object_index = np.unravel_index(np.argmax(space, axis=None), space.shape)
     return (action_index, object_index)
 
 
@@ -60,10 +63,11 @@ def tabular_q_learning(q_func, current_state_1, current_state_2, action_index,
     Returns:
         None
     """
-    # TODO Your code here
-    q_func[current_state_1, current_state_2, action_index,
-           object_index] = 0  # TODO Your update here
-
+    if terminal:
+        opt = 0
+    else:
+        opt = GAMMA * (q_func[next_state_1, next_state_2]).max()
+    q_func[current_state_1, current_state_2, action_index, object_index] = (1-ALPHA)*q_func[current_state_1, current_state_2, action_index, object_index]+ALPHA*(reward+opt)
     return None  # This function shouldn't return anything
 
 
