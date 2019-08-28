@@ -92,11 +92,11 @@ def run_episode(for_training):
     epi_reward = 0
     i = 0
 
-
     (current_room_desc, current_quest_desc, terminal) = framework.newGame()
-    current_state_1, current_state_2 = dict_room_desc[current_room_desc], dict_quest_desc[current_quest_desc]
+
     while not terminal:
         # Choose next action and execute
+        current_state_1, current_state_2 = dict_room_desc[current_room_desc], dict_quest_desc[current_quest_desc]
         action_index, object_index = epsilon_greedy(current_state_1, current_state_2, q_func, epsilon)
         next_room_desc, next_quest_desc, reward, terminal = framework.step_game(current_room_desc, current_quest_desc, action_index, object_index)
         next_room_index, next_quest_index = dict_room_desc[next_room_desc], dict_quest_desc[next_quest_desc]
@@ -113,7 +113,7 @@ def run_episode(for_training):
 
         # prepare next step
         i = i + 1
-        current_state_1, current_state_2 = next_room_index, next_quest_index
+        current_room_desc, current_quest_desc = next_room_desc, next_quest_desc
 
     if not for_training:
         return epi_reward
