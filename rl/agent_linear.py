@@ -45,8 +45,10 @@ def epsilon_greedy(state_vector, theta, epsilon):
     Returns:
         (int, int): the indices describing the action/object to take
     """
-    # TODO Your code here
-    action_index, object_index = None, None
+    if np.random.rand(1).item() <= epsilon:
+        action_index, object_index = np.random.randint(NUM_ACTIONS), np.random.randint(NUM_OBJECTS)
+    else:
+        action_index, object_index = index2tuple(np.argmax(theta @ state_vector))
     return (action_index, object_index)
 # pragma: coderesponse end
 
@@ -68,8 +70,16 @@ def linear_q_learning(theta, current_state_vector, action_index, object_index,
     Returns:
         None
     """
-    # TODO Your code here
-    theta = None # TODO Your update here
+    c = tuple2index(action_index, object_index)
+    s = current_state_vector
+    s_p = next_state_vector
+    r = reward
+    if terminal:
+        factor = r - (theta @ s)[c]
+    else:
+        factor = r - (theta @ s)[c] + GAMMA * np.max((theta @ s_p))
+    theta[c] = theta[c] + ALPHA * factor * s
+
 # pragma: coderesponse end
 
 
